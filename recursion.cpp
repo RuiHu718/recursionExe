@@ -10,6 +10,7 @@
 #include "simpio.h"
 #include "strlib.h"
 #include "stack.h"
+#include "set.h"
 
 using namespace std;
 
@@ -29,13 +30,20 @@ void MoveSingleDisk(char start, char finish);
 void MoveTower(int n, char start, char finish, char temp);
 void moveTowerWithStack();
 void processTask(taskT current, Stack<taskT> & tasks);
+int countSubsetSumWays(Set<int> & set, int target);
 
 
 int main() {
 
   //cout << countHanoiMoves(3) << endl;
   //MoveTower(3, 'A', 'B', 'C');
-  moveTowerWithStack();
+  //moveTowerWithStack();
+  Set<int> test;
+  test.add(1);
+  test.add(3);
+  test.add(4);
+  test.add(5);  
+  cout << countSubsetSumWays(test, 11) << endl;
   
   return 0;
 }
@@ -68,10 +76,10 @@ void MoveSingleDisk(char start, char finish) {
   cout << start << " -> " << finish << endl;
 }
 
+
 /* the tower algorithm implementation from text book 
  * try different simple case: n == 0 or n == 1;
  */
-
 void MoveTower(int n, char start, char finish, char temp) {
   if (n == 0) {
     //MoveSingleDisk(start, finish);
@@ -103,6 +111,12 @@ void moveTowerWithStack() {
   }
 }
 
+
+/* This is to simulate recursion
+ * for simple case, just call moveSingleDisk
+ * for more complicated cases, create three new
+ * tasks and add them to the stack
+ */
 void processTask(taskT current, Stack<taskT> & tasks) {
   if (current.n == 1) {
     MoveSingleDisk(current.start, current.finish);
@@ -129,5 +143,31 @@ void processTask(taskT current, Stack<taskT> & tasks) {
     c.finish = current.temp;
     c.temp = current.finish;
     tasks.push(c);
+  }
+}
+
+
+/* Function: countSubsetSumWays
+ * Usage:    n = countSubsetSumWays(set, target)
+ * ----------------------------------------------
+ * Problem 4 in text book
+ * Instead of returning true or false for the subset
+ * sum problem, this function calculates how many ways
+ * the sum can be returned.
+ * Precondition:
+ * Postcondition:
+ */
+int countSubsetSumWays(Set<int> & set, int target) {
+  if (set.isEmpty()) {
+    if (target == 0) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } else {
+    int element = set.first();
+    Set<int> rest = set - element;
+    return countSubsetSumWays(rest, target) +
+      countSubsetSumWays(rest, target-element); 
   }
 }
