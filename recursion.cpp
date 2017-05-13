@@ -12,6 +12,7 @@
 #include "stack.h"
 #include "set.h"
 #include "lexicon.h"
+#include "vector.h"
 
 using namespace std;
 
@@ -33,6 +34,9 @@ void moveTowerWithStack();
 void processTask(taskT current, Stack<taskT> & tasks);
 int countSubsetSumWays(Set<int> & set, int target);
 void addEmbeddedWords(Set<string> & set, string target);
+bool isMeasurable(int target, Vector<int> & weights);
+void differentPermutation(Set<string> & set, string target);
+void insertToAllPositions(Vector<Set<string> > & vec, string current, char t);
 
 
 int main() {
@@ -50,16 +54,25 @@ int main() {
   // test.add(5);  
   // cout << countSubsetSumWays(test, 11) << endl;
 
-  Lexicon english("EnglishWords.dat");  
+  // Lexicon english("EnglishWords.dat");
+  // addEmbeddedWords(set, "happy");  
+
   Set<string> set;
-  addEmbeddedWords(set, "happy");
-  //string result = set.toString();
-  for (string word : set) {
-    if (english.contains(word)) {
-      cout << word << endl;
-    }
-  }
-  
+  Vector<Set<string> > vec;
+  //insertToAllPositions(vec, "ABC", 'D');
+  differentPermutation(set, "ABCD") ;
+  string result = set.toString();
+  cout << result << endl;
+
+  // for (string word : set) {
+  //   if (english.contains(word)) {
+  //     cout << word << endl;
+  //   }
+  // }
+
+  // Vector<int> sampleWeights;
+  // sampleWeights += 1, 3;
+  // cout << isMeasurable(5, sampleWeights) << endl;
   
   return 0;
 }
@@ -220,5 +233,75 @@ void addEmbeddedWords(Set<string> & set, string target) {
 
     string empty = "";
     set.add(target[0]+empty);	// to avoid old style c string problem
+  }
+}
+
+
+/* Function: differentPermutation
+ * Usage:    
+ * -------------------------------
+ * Problem eight
+ */
+void differentPermutation(Set<string> & set, string target) {
+  if (target.length() == 1) {
+    set.add(target);
+  } else {
+    differentPermutation(set, target.substr(1));
+    Vector<Set<string> > vec;
+    for (string current : set) {
+      insertToAllPositions(vec, current, target[0]);
+    }
+
+    set.clear();		// hack, make sure the intermidiate strings
+				// are not shown
+    for (int i = 0; i < vec.size(); i++) {
+      set += vec[i];
+    }
+  }
+}
+
+
+/* Function: insertToAllPositions
+ * Usage:
+ * ------------------------------
+ * Takes a string, add char t to all
+ * possible positions of the string
+ * and add each combination to a set
+ * then add the set to a vector of sets
+ */
+void insertToAllPositions(Vector<Set<string> > & vec, string current, char t) {
+  Set<string> temp;
+  string empty = "";
+  string x = t + empty;
+  for (int i = 0; i <= current.length(); i++) {
+    string s = current;
+    s.insert(i, x);
+    temp.add(s);
+  }
+
+  vec.add(temp);
+}
+
+
+/* Function: isMeasurable
+ * Usage:    
+ * -----------------------
+ * Problem six of text book
+ * Precondition:
+ * Postcondition:
+ */
+bool isMeasurable(int target, Vector<int> & weights) {
+  if (weights.size() == 1) {
+    if (target == weights.get(0)) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    int currentWeight = weights.get(0);
+    weights.remove(0);
+    return isMeasurable(target - currentWeight, weights)
+      || isMeasurable(target + currentWeight, weights)
+      || isMeasurable(target, weights);
   }
 }
