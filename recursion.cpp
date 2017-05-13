@@ -11,6 +11,7 @@
 #include "strlib.h"
 #include "stack.h"
 #include "set.h"
+#include "lexicon.h"
 
 using namespace std;
 
@@ -31,19 +32,34 @@ void MoveTower(int n, char start, char finish, char temp);
 void moveTowerWithStack();
 void processTask(taskT current, Stack<taskT> & tasks);
 int countSubsetSumWays(Set<int> & set, int target);
+void addEmbeddedWords(Set<string> & set, string target);
 
 
 int main() {
 
   //cout << countHanoiMoves(3) << endl;
+
   //MoveTower(3, 'A', 'B', 'C');
+
   //moveTowerWithStack();
-  Set<int> test;
-  test.add(1);
-  test.add(3);
-  test.add(4);
-  test.add(5);  
-  cout << countSubsetSumWays(test, 11) << endl;
+
+  // Set<int> test;
+  // test.add(1);
+  // test.add(3);
+  // test.add(4);
+  // test.add(5);  
+  // cout << countSubsetSumWays(test, 11) << endl;
+
+  Lexicon english("EnglishWords.dat");  
+  Set<string> set;
+  addEmbeddedWords(set, "happy");
+  //string result = set.toString();
+  for (string word : set) {
+    if (english.contains(word)) {
+      cout << word << endl;
+    }
+  }
+  
   
   return 0;
 }
@@ -169,5 +185,40 @@ int countSubsetSumWays(Set<int> & set, int target) {
     Set<int> rest = set - element;
     return countSubsetSumWays(rest, target) +
       countSubsetSumWays(rest, target-element); 
+  }
+}
+
+
+/* Function: addEmbeddedWords
+ * Usage:    addEmbeddedWords(set, s)
+ * -----------------------------------
+ * Problem 5
+ * This function adds all string combinations
+ * According to rules specified by problem 5
+ * To a set. Note the strings added are not necessarily
+ * Valid English words. A different function will check 
+ * That against lexicon and print out results.
+ * Precondition:
+ * Postcondition:
+ * This one was tricky
+ */
+void addEmbeddedWords(Set<string> & set, string target) {
+  if (target.length() == 1) {
+    set.add(target);
+    //return;
+  } else {
+    addEmbeddedWords(set, target.substr(1));
+
+    Set<string> copy;	     //you don't want to change and use
+			     //a set at the same time
+    for (string current : set) {
+      copy.add(current);
+      string temp = target[0] + current;
+      copy.add(temp);
+    }
+    set = copy;
+
+    string empty = "";
+    set.add(target[0]+empty);	// to avoid old style c string problem
   }
 }
