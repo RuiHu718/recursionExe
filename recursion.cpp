@@ -13,6 +13,9 @@
 #include "set.h"
 #include "lexicon.h"
 #include "vector.h"
+#include "gwindow.h"
+#include "random.h"
+#include "gobjects.h"
 
 using namespace std;
 
@@ -25,6 +28,12 @@ struct taskT {
   char finish;
   char temp;
 };
+
+
+/* Constants */
+const double MIN_AREA = 10000;	// Smallest square that will be split
+const double MIN_EDGE = 20;	// Smallest edge length allowd
+const double HALF_INCH_TICK = 20;
 
 
 int countHanoiMoves(int n);
@@ -43,6 +52,9 @@ void recursiveMnemonics(string prefix, string rest);
 void listCompletions(string digits, Lexicon & lex);
 void recursiveMnemonicsEnglish(string prefix, string rest, Lexicon & lex);
 void expandWords(string word, Lexicon & lex);
+void subdivideCanvas(GWindow & gw, double x, double y,
+		     double width, double height);
+void drawRuler(double x, double y, double w, double h, GWindow & gw);
 
 
 int main() {
@@ -82,10 +94,18 @@ int main() {
 
   //listMnemonics("72547");
 
-  Lexicon english("EnglishWords.dat");
-  listCompletions("72547", english);
+  // Lexicon english("EnglishWords.dat");
+  // listCompletions("72547", english);
   //expandWords("rakis", english);
 
+  GWindow gw;
+  //drawRuler(gw.getWidth() - 5, gw.getHeight() / 2,
+  //	    10, HALF_INCH_TICK, gw);
+  drawRuler(0, 100, 100, HALF_INCH_TICK, gw);
+  //gw.add(new GLine(0, 0, gw.getWidth(), gw.getHeight()));
+  //gw.add(new GLine(0, gw.getHeight(), gw.getWidth(), 0));
+
+  //subdivideCanvas(gw, 0, 0, gw.getWidth(), gw.getHeight());
   
   return 0;
 }
@@ -424,5 +444,45 @@ void expandWords(string word, Lexicon & lex) {
       expandWords(newWord, lex);
     }
 
+  }
+}
+
+
+/* Function: subdivideCanvas
+ * Usage:    subdivideCanvas(gw, x, y, width, height);
+ * ---------------------------------------------------
+ * Decomposes the specified rectangular region on the canvas recursively
+ * by splitting that rectangle randomly along its larger dimention. 
+ */
+void subdivideCanvas(GWindow & gw, double x, double y,
+		     double width, double height) {
+  if (width * height >= MIN_AREA) {
+    if (width > height) {
+      double mid = randomReal(MIN_EDGE, width - MIN_EDGE);
+      subdivideCanvas(gw, x, y, mid, height);
+      subdivideCanvas(gw, x + mid, y, width - mid, height);
+      gw.drawLine(x + mid, y, x + mid, y + height);
+    } else {
+      double mid = randomReal(MIN_EDGE, height - MIN_EDGE);
+      subdivideCanvas(gw, x, y, width, mid);
+      subdivideCanvas(gw, x, y + mid, width, height - mid);
+      gw.drawLine(x, y + mid, x + width, y + mid);
+    }
+  }
+}
+
+
+/* Function: drawRuler
+ * Usage:    drawRuler(10, 10, 20, 20);
+ * --------------------------------------------------
+ * Problem 14 of the text book
+ * similar to binary search in essence
+ */
+void drawRuler(double x, double y, double w, double h, GWindow & gw) {
+  gw.add(new GLine(x, y, x + w, y));
+  if (h > HALF_INCH_TICK / 16) {
+    gw.add(new GLine(x + w/2, y, x + w/2, y + h));
+    drawRuler(x, y, w/2, h / 2, gw);
+    drawRuler(x + w/2, y, w / 2, h / 2, gw);
   }
 }
