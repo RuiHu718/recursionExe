@@ -37,6 +37,12 @@ void addEmbeddedWords(Set<string> & set, string target);
 bool isMeasurable(int target, Vector<int> & weights);
 void differentPermutation(Set<string> & set, string target);
 void insertToAllPositions(Vector<Set<string> > & vec, string current, char t);
+string digitLetter(char ch);
+void listMnemonics(string str);
+void recursiveMnemonics(string prefix, string rest);
+void listCompletions(string digits, Lexicon & lex);
+void recursiveMnemonicsEnglish(string prefix, string rest, Lexicon & lex);
+void expandWords(string word, Lexicon & lex);
 
 
 int main() {
@@ -54,15 +60,15 @@ int main() {
   // test.add(5);  
   // cout << countSubsetSumWays(test, 11) << endl;
 
-  // Lexicon english("EnglishWords.dat");
+
   // addEmbeddedWords(set, "happy");  
 
-  Set<string> set;
-  Vector<Set<string> > vec;
+  // Set<string> set;
+  // Vector<Set<string> > vec;
   //insertToAllPositions(vec, "ABC", 'D');
-  differentPermutation(set, "ABCD") ;
-  string result = set.toString();
-  cout << result << endl;
+  // differentPermutation(set, "ABCD") ;
+  // string result = set.toString();
+  // cout << result << endl;
 
   // for (string word : set) {
   //   if (english.contains(word)) {
@@ -73,6 +79,13 @@ int main() {
   // Vector<int> sampleWeights;
   // sampleWeights += 1, 3;
   // cout << isMeasurable(5, sampleWeights) << endl;
+
+  //listMnemonics("72547");
+
+  Lexicon english("EnglishWords.dat");
+  listCompletions("72547", english);
+  //expandWords("rakis", english);
+
   
   return 0;
 }
@@ -303,5 +316,113 @@ bool isMeasurable(int target, Vector<int> & weights) {
     return isMeasurable(target - currentWeight, weights)
       || isMeasurable(target + currentWeight, weights)
       || isMeasurable(target, weights);
+  }
+}
+
+
+/* Function: digitLetter(char ch)
+ * Usage:    string s = digitLetter('A')
+ * -------------------------------------
+ * Part of problem ten from the text book
+ * Given a number, returns a string according
+ * To the phone dial pad
+ * Precondition:
+ * Postcondition:
+ */
+string digitLetter(char ch) {
+  switch(ch) {
+  case '0' : return ("0");
+  case '1' : return ("1");
+  case '2': return ("ABC");
+  case '3': return ("DEF");
+  case '4': return ("GHI");
+  case '5': return ("JKL");
+  case '6': return ("MNO");
+  case '7': return ("PRS");
+  case '8': return ("TUV");
+  case '9': return ("WXY");
+  default:  return ("Illegal digit"); // this is not right
+  }
+}
+
+
+/* Function: listMnemonics(string str)
+ * Usage:    listMnemonics("2154")
+ * -----------------------------------
+ * Problem ten, wrapper function
+ */
+void listMnemonics(string str) {
+  recursiveMnemonics("", str);
+}
+
+
+/* Function: recursiveMnemonics(string prefix, string rest)
+ * Usage:    recursiveMnemonics("", "1234")
+ * ---------------------------------------------------------
+ * Problem ten, heavy lifting here
+ * Precondition:
+ * Postcondition:
+ */
+void recursiveMnemonics(string prefix, string rest) {
+  if (rest == "") {
+    cout << prefix << endl;
+  } else {
+    string options = digitLetter(rest[0]);
+    for (int i = 0; i < options.length(); i++) {
+      recursiveMnemonics(prefix+options[i], rest.substr(1));
+    }
+  }
+}
+
+
+/* Function: listCompletions(string digits, Lexicon & lex)
+ * Usage:    listCompletions("12345", english)
+ * --------------------------------------------------------
+ * Problem eleven
+ */
+void listCompletions(string digits, Lexicon & lex) {
+  recursiveMnemonicsEnglish("", digits, lex);
+}
+
+
+/* Function: recursiveMnemonicsEnglish(string prefix, string rest, Lexicon & lex)
+ * Usage:    recursiveMnemonicsEnglish("", "12345", english)
+ * -------------------------------------------------------------------------------
+ * Problem eleven, heavy lifting here
+ */
+void recursiveMnemonicsEnglish(string prefix, string rest, Lexicon & lex) {
+  if (rest == "") {
+    expandWords(prefix, lex);
+  } else {
+    string options = digitLetter(rest[0]);
+    for (int i = 0; i < options.length(); i++) {
+      recursiveMnemonicsEnglish(prefix+options[i], rest.substr(1), lex);
+    }
+  }
+}
+
+
+/* Function: expandWords(string word, Lexicon & lex) 
+ * Usage:    expandWords("rakis", english)
+ * -------------------------------------------------
+ * Helper function for problem eleven
+ * Given a prefix, expand it by trying all letter combinations
+ * The recursion will terminate when the current string can't possiblely
+ * Form a valid word.
+ */
+void expandWords(string word, Lexicon & lex) {
+  if (!lex.containsPrefix(word)) {
+    return; 			// recursion ends here
+  } else {
+    if (lex.contains(word)) {
+      cout << word << endl;
+    }
+
+    string allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (int i = 0; i < allLetters.length(); i++) {
+      string newWord = word + allLetters[i];
+      expandWords(newWord, lex);
+    }
+
   }
 }
