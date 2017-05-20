@@ -56,6 +56,8 @@ void subdivideCanvas(GWindow & gw, double x, double y,
 		     double width, double height);
 void drawRuler(double x, double y, double w, double h, GWindow & gw);
 bool solvable(int start, Vector<int> & squares);
+void writeChar(int n);
+bool isSubsequence(string big, string small);
 
 
 int main() {
@@ -108,19 +110,22 @@ int main() {
 
   //subdivideCanvas(gw, 0, 0, gw.getWidth(), gw.getHeight());
 
-  Vector<int> test;
-  test.add(3);
-  test.add(6);
-  test.add(4);
-  test.add(1);
-  test.add(3);
-  test.add(4);
-  test.add(2);
-  test.add(5);
-  test.add(3);
-  test.add(0);  
+  // Vector<int> test;
+  // test.add(3);
+  // test.add(6);
+  // test.add(4);
+  // test.add(1);
+  // test.add(3);
+  // test.add(4);
+  // test.add(2);
+  // test.add(5);
+  // test.add(3);
+  // test.add(0);  
+  // cout << solvable(1, test) << endl;
 
-  cout << solvable(1, test) << endl;
+  //writeChar(9);
+
+  cout << isSubsequence("ccmputer", "ccpe") << endl;
   
   return 0;
 }
@@ -529,5 +534,44 @@ bool solvable(int start, Vector<int> & squares) {
     int value = temp[start];
     temp.set(start, -1);	// mark the current square as visited
     return solvable(start + value, temp) || solvable(start - value, temp);
+  }
+}
+
+
+/* Function: writeChar
+ * Usage:    writeChar(9)
+ * -----------------------
+ * Section practice
+ */
+void writeChar(int n) {
+  if (n < 1) {
+    throw "Invalid input.";
+  } else if (n == 1) {
+    cout << "*";
+  } else if (n == 2) {
+    cout << "**";
+  } else {
+    cout << "<";
+    writeChar(n - 2);
+    cout << ">";
+  }
+}
+
+
+/* Function: isSubsequence
+ * Usage;    bool x = isSubsequence("computer", "com")
+ * ----------------------------------------------------
+ * Section practice
+ */
+bool isSubsequence(string big, string small) {
+  if (small == "") {
+    return true;
+  } else {
+    int index = big.find(small[0]);
+    if (index == string::npos) {
+      return false;
+    } else {
+      return isSubsequence(big.substr(index + 1), small.substr(1));
+    }
   }
 }
