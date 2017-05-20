@@ -55,6 +55,7 @@ void expandWords(string word, Lexicon & lex);
 void subdivideCanvas(GWindow & gw, double x, double y,
 		     double width, double height);
 void drawRuler(double x, double y, double w, double h, GWindow & gw);
+bool solvable(int start, Vector<int> & squares);
 
 
 int main() {
@@ -98,14 +99,28 @@ int main() {
   // listCompletions("72547", english);
   //expandWords("rakis", english);
 
-  GWindow gw;
+  //GWindow gw;
   //drawRuler(gw.getWidth() - 5, gw.getHeight() / 2,
   //	    10, HALF_INCH_TICK, gw);
-  drawRuler(0, 100, 100, HALF_INCH_TICK, gw);
+  //drawRuler(0, 100, 100, HALF_INCH_TICK, gw);
   //gw.add(new GLine(0, 0, gw.getWidth(), gw.getHeight()));
   //gw.add(new GLine(0, gw.getHeight(), gw.getWidth(), 0));
 
   //subdivideCanvas(gw, 0, 0, gw.getWidth(), gw.getHeight());
+
+  Vector<int> test;
+  test.add(3);
+  test.add(6);
+  test.add(4);
+  test.add(1);
+  test.add(3);
+  test.add(4);
+  test.add(2);
+  test.add(5);
+  test.add(3);
+  test.add(0);  
+
+  cout << solvable(1, test) << endl;
   
   return 0;
 }
@@ -484,5 +499,35 @@ void drawRuler(double x, double y, double w, double h, GWindow & gw) {
     gw.add(new GLine(x + w/2, y, x + w/2, y + h));
     drawRuler(x, y, w/2, h / 2, gw);
     drawRuler(x + w/2, y, w / 2, h / 2, gw);
+  }
+}
+
+
+/* Function: solvable
+ * Usage:    bool x = solvable(0, squares)
+ * ---------------------------------------
+ * Professor Zelenski's assignment 3, problem 5
+ * Precondition:
+ * Postcondition:
+ * For myself: seems to work, but need to test some more
+ * the recursive insight is this: at every step you have two
+ * choices, and you should try them both, each one will either
+ * lead you to the goal or reach a dead end. Dead end can be defined
+ * in the following ways: index out of bounds, or reach a square which
+ * has been visited before. 
+ */
+bool solvable(int start, Vector<int> & squares) {
+  Vector<int> temp = squares;
+  if ((start > temp.size() - 1) || (start < 0)) {
+    return false;
+  }
+  if (temp[start] == 0) {
+    return true;
+  } else if (temp[start] == -1) {
+    return false;
+  } else {
+    int value = temp[start];
+    temp.set(start, -1);	// mark the current square as visited
+    return solvable(start + value, temp) || solvable(start - value, temp);
   }
 }
