@@ -59,6 +59,11 @@ bool solvable(int start, Vector<int> & squares);
 void writeChar(int n);
 bool isSubsequence(string big, string small);
 
+bool canOfferUniversalCoverage(Set<string>& cities,
+			       Vector< Set<string> >& locations,
+			       int numHospitals,
+			       Vector< Set<string> >& result);
+
 
 int main() {
 
@@ -125,7 +130,46 @@ int main() {
 
   //writeChar(9);
 
-  cout << isSubsequence("ccmputer", "ccpe") << endl;
+  //cout << isSubsequence("ccmputer", "ccpe") << endl;
+
+
+  Set<string> cities;
+  cities += "A";
+  cities += "B";
+  cities += "C";
+  cities += "D";
+  cities += "E";
+  cities += "F";  
+
+  Vector<Set<string> > locations;
+  Set<string> temp;
+  temp += "A";
+  temp += "B";
+  temp += "C";
+  locations.add(temp);
+
+  temp.clear();
+  temp += "A";
+  temp += "C";
+  temp += "D";
+  locations.add(temp);
+
+  temp.clear();
+  temp += "B";
+  temp += "F";
+  locations.add(temp);
+
+  temp.clear();
+  temp += "C";
+  temp += "E";
+  temp += "F";
+  locations.add(temp);
+
+  //cout << cities.toString() << endl;
+  //cout << locations.toString() << endl;
+  Vector<Set<string> > result;
+  
+  cout << canOfferUniversalCoverage(cities, locations, 4, result) << endl;
   
   return 0;
 }
@@ -575,3 +619,35 @@ bool isSubsequence(string big, string small) {
     }
   }
 }
+
+
+/* Function: canOfferUniversalCoverage
+ * Usage:    
+ * -----------------------------------
+ * Assignment problem from 106B 2013
+ * Precondition
+ * Postcondition
+ */
+bool canOfferUniversalCoverage(Set<string>& cities,
+			       Vector< Set<string> >& locations,
+			       int numHospitals,
+			       Vector< Set<string> >& result) {
+  if (numHospitals == 0) {
+    return cities.isEmpty();
+  } else if (locations.size() == 0) {
+    return false;
+  } else {
+    Vector<Set<string> > temp = locations;
+    Vector<Set<string> > temp2 = locations;    
+    temp.remove(0);
+    temp2.remove(0);
+    Set<string> copy = cities;
+
+    return canOfferUniversalCoverage(copy -= locations[0], temp2,
+    				     numHospitals - 1, result)
+      || canOfferUniversalCoverage(cities, temp, numHospitals, result);
+  }
+
+}
+
+ 
