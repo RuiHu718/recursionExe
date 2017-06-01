@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cmath>
 #include "console.h"
 #include "filelib.h"
 #include "simpio.h"
@@ -63,6 +64,14 @@ bool canOfferUniversalCoverage(Set<string>& cities,
 			       Vector< Set<string> >& locations,
 			       int numHospitals,
 			       Vector< Set<string> >& result);
+
+void generateNewSet(Set<string> & set);
+Set<string> generateInsertions(string s);
+Set<string> generateDeletions(string s);
+Set<string> generateChanges(string s);
+int editDistance(string s1, string s2);
+void myEditDistance(int & n, string target, Set<string> & set);
+bool isBalanced(string s);
 
 
 int main() {
@@ -167,9 +176,26 @@ int main() {
 
   //cout << cities.toString() << endl;
   //cout << locations.toString() << endl;
-  Vector<Set<string> > result;
+  // Vector<Set<string> > result;
   
-  cout << canOfferUniversalCoverage(cities, locations, 4, result) << endl;
+  // cout << canOfferUniversalCoverage(cities, locations, 3, result) << endl;
+  // cout << result.toString() << endl;
+
+
+  // Set<string> test;
+  // test += "hello";
+  //generateNewSet(test);
+  //cout << test.toString() << endl;
+  //cout << test.contains("hello") << endl;
+  // int n = 0;
+  // myEditDistance(n, "bhllo", test);
+  // cout << n << endl;
+
+  // string s1 = "football";
+  // string s2 = "cookies";
+  // cout << editDistance(s1, s2) << endl;
+
+  cout << isBalanced("()[]{}{[()]}") << endl;
   
   return 0;
 }
@@ -627,14 +653,25 @@ bool isSubsequence(string big, string small) {
  * Assignment problem from 106B 2013
  * Precondition
  * Postcondition
+ * Remain: I don't think the current implementation of the result part
+ * is correct, test and fix this.
  */
 bool canOfferUniversalCoverage(Set<string>& cities,
 			       Vector< Set<string> >& locations,
 			       int numHospitals,
 			       Vector< Set<string> >& result) {
-  if (numHospitals == 0) {
-    return cities.isEmpty();
+
+  if (numHospitals == 0) {	// there was a bug here, the order of which
+				// the first two if tests appears, think about
+				// this some more
+    if (cities.isEmpty()){
+      return cities.isEmpty();
+    } else {
+      result.remove(result.size() - 1);
+      return cities.isEmpty();
+    }
   } else if (locations.size() == 0) {
+    result.remove(result.size() - 1);    
     return false;
   } else {
     Vector<Set<string> > temp = locations;
@@ -643,11 +680,198 @@ bool canOfferUniversalCoverage(Set<string>& cities,
     temp2.remove(0);
     Set<string> copy = cities;
 
+    //Vector<Set<string> > resultTemp = result;
+    result.add(locations[0]);
+
     return canOfferUniversalCoverage(copy -= locations[0], temp2,
     				     numHospitals - 1, result)
       || canOfferUniversalCoverage(cities, temp, numHospitals, result);
   }
-
 }
 
  
+/* Function: generateNewSet
+ * Usage:    generateNewSet(set);
+ * ------------------------------
+ * Generates a new set of strings according to the following rule:
+ * for each string in the original set, expand it in three ways: insert
+ * change, and remove. Note we are only making one step change here. 
+ * The result will be all strings that are one distance away from the
+ * original strings. The original strings are not kept.
+ * Parameters and return values:
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+void generateNewSet(Set<string> & set) {
+  Set<string> result;
+  for (string s : set) {
+    result += generateInsertions(s);
+    result += generateDeletions(s);
+    result += generateChanges(s);
+  }
+
+  set.clear();
+  set = result;
+}
+
+
+/* Function: generateInsertions
+ * Usage:    set = generateInsertions("hello");
+ * --------------------------------------------
+ * Given a string, generates a set of new strings which
+ * are one insertion away from the original string.
+ * Parameters and return values
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+Set<string> generateInsertions(string s) {
+  Set<string> result;
+  for (int i = 0; i <= s.length(); i++) {
+    for (int j = 0; j < 26; j++) {
+      string temp = s;
+      char ch = 'a' + j;
+      string empty = "";
+      result.add(temp.insert(i, empty + ch));
+    }
+  }
+
+  return result;
+}
+
+
+/* Function: generateDeletions
+ * Usage:    set = generateDeletions("hello");
+ * --------------------------------------------
+ * Given a string, generates a set of new strings which
+ * are one deletion away from the original string.
+ * Parameters and return values
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+Set<string> generateDeletions(string s) {
+  Set<string> result;
+  for (int i = 0; i < s.length(); i++) {
+    string temp = s;
+    result.add(temp.erase(i, 1));
+  }
+
+  return result;
+}
+
+
+/* Function: generateChanges
+ * Usage:    set = generateChanges("hello");
+ * --------------------------------------------
+ * Given a string, generates a set of new strings which
+ * are one change away from the original string.
+ * Parameters and return values
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+Set<string> generateChanges(string s) {
+  Set<string> result;
+  for (int i = 0; i < s.length(); i++) {
+    for (int j = 0; j < 26; j++) {
+      string temp = s;
+      char ch = 'a' + j;
+      string empty = "";
+      result.add(temp.replace(i, 1, empty + ch));
+    }
+  }
+
+  return result;
+}
+
+
+/* Function: editDistance
+ * Usage:    n = editDistance("hello", "aello");
+ * ---------------------------------------------
+ * 106X section problem
+ * Parameters and return values
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+
+// int editDistance(string s1, string s2) {
+//   int n = 0;
+//   Set<string> set;
+//   set += s1;
+//   myEditDistance(n, s2, set);
+
+//   return n;
+// }
+
+
+/* Function: myEditDistance
+ * Usage:    myEditDistance(n, target, set);
+ * ---------------------------------------------
+ * 106X section problem
+ * Parameters and return values
+ * Preconditions:
+ * Postconditions:
+ * Assumptions:
+ */
+void myEditDistance(int & n, string target, Set<string> & set) {
+  if (set.contains(target)) {
+    return;
+  } else {
+    generateNewSet(set);
+    n++;
+    myEditDistance(n, target, set);
+  }
+}
+
+
+/* This came from section solution
+ * I still don't quite understrand this 
+ * TODO: figure this one out
+ */
+
+int editDistance(string s1, string s2) {
+  if (s1 == "") {
+    return s2.length();
+  } else if (s2 == "") {
+    return s1.length();
+  }
+  // try three possibilities for the "zeroth" character:
+  int add = 1 + editDistance(s1, s2.substr(1));
+  int del = 1 + editDistance(s1.substr(1), s2);
+  int sub = editDistance(s1.substr(1), s2.substr(1));
+  if (s1[0] != s2[0]) {
+    sub += 1;
+  }
+  return min(add, min(del, sub));
+}
+
+
+/* Function: isBalanced
+ * Usage:    isBalanced("{}()")
+ * --------------------------------
+ * Strategy: a string is balanced if it meets one the following two conditions:
+ * 1. it is empty string
+ * 2. it contains "()", "[]", or "{}" as substring AND if you remove "()", "[]"
+ * or "{}" from the original string, then the new string is still balanced
+ */
+bool isBalanced(string s) {
+  if (s == "") {
+    return true;
+  } else {
+    int n = -1;
+    if (s.find("()") != string::npos) {
+      n = s.find("()");
+    }
+    if (s.find("[]") != string::npos) {
+      n = s.find("[]");
+    }
+    if (s.find("{}") != string::npos) {
+      n = s.find("{}");
+    }
+    
+    return (n != -1) && isBalanced(s.erase(n, 2));
+  }
+}
