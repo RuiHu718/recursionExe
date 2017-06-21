@@ -30,6 +30,12 @@ struct taskT {
   char temp;
 };
 
+struct domino {
+  int first;
+  int second;
+  bool used;
+};
+
 
 /* Constants */
 const double MIN_AREA = 10000;	// Smallest square that will be split
@@ -72,7 +78,15 @@ Set<string> generateChanges(string s);
 int editDistance(string s1, string s2);
 void myEditDistance(int & n, string target, Set<string> & set);
 bool isBalanced(string s);
-
+bool morph(string start, string dest, Lexicon & lex);
+bool chainExists(Vector<domino> & dominoes, int start, int end);
+bool partitionable(Vector<int> &nums, Vector<int> &temp);
+int sumVector(Vector<int> vec);
+bool partitionableSolution(Vector<int> &rest, int sum1, int sum2);
+void makeChange(int target, Vector<int>& coins);
+void myMakeChange(int target, Vector<int> &coins, Vector<int> &count);
+int sumVectors(Vector<int> a, Vector<int> b);
+string longestCommonSubsequence(string s1, string s2);
 
 int main() {
 
@@ -111,7 +125,7 @@ int main() {
 
   //listMnemonics("72547");
 
-  // Lexicon english("EnglishWords.dat");
+  Lexicon lex("EnglishWords.dat");
   // listCompletions("72547", english);
   //expandWords("rakis", english);
 
@@ -142,37 +156,37 @@ int main() {
   //cout << isSubsequence("ccmputer", "ccpe") << endl;
 
 
-  Set<string> cities;
-  cities += "A";
-  cities += "B";
-  cities += "C";
-  cities += "D";
-  cities += "E";
-  cities += "F";  
+  // Set<string> cities;
+  // cities += "A";
+  // cities += "B";
+  // cities += "C";
+  // cities += "D";
+  // cities += "E";
+  // cities += "F";  
 
-  Vector<Set<string> > locations;
-  Set<string> temp;
-  temp += "A";
-  temp += "B";
-  temp += "C";
-  locations.add(temp);
+  // Vector<Set<string> > locations;
+  // Set<string> temp;
+  // temp += "A";
+  // temp += "B";
+  // temp += "C";
+  // locations.add(temp);
 
-  temp.clear();
-  temp += "A";
-  temp += "C";
-  temp += "D";
-  locations.add(temp);
+  // temp.clear();
+  // temp += "A";
+  // temp += "C";
+  // temp += "D";
+  // locations.add(temp);
 
-  temp.clear();
-  temp += "B";
-  temp += "F";
-  locations.add(temp);
+  // temp.clear();
+  // temp += "B";
+  // temp += "F";
+  // locations.add(temp);
 
-  temp.clear();
-  temp += "C";
-  temp += "E";
-  temp += "F";
-  locations.add(temp);
+  // temp.clear();
+  // temp += "C";
+  // temp += "E";
+  // temp += "F";
+  // locations.add(temp);
 
   //cout << cities.toString() << endl;
   //cout << locations.toString() << endl;
@@ -195,7 +209,24 @@ int main() {
   // string s2 = "cookies";
   // cout << editDistance(s1, s2) << endl;
 
-  cout << isBalanced("()[]{}{[()]}") << endl;
+  //cout << isBalanced("()[]{}{[()]}") << endl;
+
+  //cout << morph("university", "school", lex) << endl;
+
+  // Vector<int> test;
+
+  // test.add(1);
+  // test.add(10);
+  // test.add(5);
+
+  // Vector<int> temp;
+  // temp.add(0);
+  // temp.add(0);
+  // temp.add(0);  
+
+  // makeChange(15, test);
+
+  cout << longestCommonSubsequence("mars", "megan") << endl;
   
   return 0;
 }
@@ -873,5 +904,258 @@ bool isBalanced(string s) {
     }
     
     return (n != -1) && isBalanced(s.erase(n, 2));
+  }
+}
+
+
+/* Function: morph
+ * Usage:    morph("read", "boot") 
+ * ---------------------------------
+ */
+bool morph(string start, string dest, Lexicon & lex) {
+  if (start == dest) {
+    return true;
+  }
+  if (!lex.contains(start)) {
+    return false;
+  }
+
+  for (int i = 0; i < start.length(); i++) {
+    if (dest[i] != start[i]) {
+      char saved = start[i];
+      start[i] = dest[i];
+      if (morph(start, dest, lex)) {
+	return true;
+      }
+      start[i] = saved;
+    }
+  }
+
+  return false;
+}
+
+
+bool chainExists(Vector<domino> & dominoes, int start, int end) {
+  if (start == end) {
+    return true;
+  }
+
+  for (int i = 0; i < dominoes.size(); i++) {
+    if (!dominoes[i].used) {
+      dominoes[i].used = true;
+      if (dominoes[i].first == start &&
+	  chainExists(dominoes, dominoes[i].second, end)) return true;
+      if (dominoes[i].second == start &&
+	  chainExists(dominoes, dominoes[i].first, end)) return true;
+      dominoes[i].used = false;
+    }
+  }
+
+  return false;
+}
+
+
+/* This is my solution, not as elegant as the instructor's */
+bool partitionable(Vector<int> &nums, Vector<int> &temp) {
+  if (sumVector(nums) == sumVector(temp)) {
+    return true;
+  }
+  if (nums.isEmpty()) {
+    return false;
+  }
+  
+  for (int i = 0; i < nums.size(); i++) {
+    int ele = nums[i];
+    temp.add(ele);
+    nums.remove(i);
+    if (partitionable(nums, temp)) {
+      return true;
+    }
+    temp.remove(temp.size() - 1);
+    nums.insert(i, ele);
+  }
+
+  return false;
+}
+
+
+int sumVector(Vector<int> vec) {
+  int sum;
+  for (int i = 0; i < vec.size(); i++) {
+    sum += vec[i];
+  }
+
+  return sum;
+}
+
+
+/* Instructor solution for the above problem */
+bool partitionableSolution(Vector<int> &rest, int sum1, int sum2) {
+  if (rest.isEmpty()) {
+    return sum1 == sum2;
+  } else {
+    int n = rest[0];
+    rest.remove(0);
+
+    bool answer = partitionableSolution(rest, sum1 + n, sum2) ||
+                  partitionableSolution(rest, sum1, sum2 + n);
+
+    rest.insert(0, n);
+    return answer;
+  }
+}
+
+
+void makeChange(int target, Vector<int>& coins) {
+  Vector<int> count;
+  for (int i = 0; i < coins.size(); i++) {
+    count.add(0);
+  }
+
+  myMakeChange(target, coins, count);
+}
+
+/* There is a bug here, see program output
+   recursive breakdown is not ideal, that is why you have repetition
+   {0, 1} => {1, 1},  {1, 0} => {1, 1}
+   fix this
+ */
+void myMakeChange(int target, Vector<int> &coins, Vector<int> &count) {
+  if (sumVectors(coins, count) == target) {
+    cout << count.toString() << endl;
+    return;
+  }
+  if (sumVectors(coins, count) > target) {
+    return;
+  }
+
+  for (int i = 0; i < count.size(); i++) {
+    count[i]++;
+    cout << "Before: " << endl;
+    cout << count[0] << " " << count[1] << endl;
+    myMakeChange(target, coins, count);
+    count[i]--;
+    cout << "After: " << endl;
+    cout << count[0] << " " << count[1] << endl;
+    
+  }
+}
+
+
+int sumVectors(Vector<int> a, Vector<int> b) {
+  int sum = 0;
+  for (int i = 0; i < a.size(); i++) {
+    sum += a[i] * b[i];
+  }
+
+  return sum;
+}
+
+
+/* makeChange solution */
+void makeChange(int amount, Vector<int> & coins, Vector<int> & chosen) {
+  if (coins.isEmpty()) {
+    if (amount == 0) {
+      cout << chosen << endl;
+    }
+  } else {
+    int coin = coins[0];
+    coins.remove(0);
+    for (int i = 0; i <= (amount / coin); i++) {
+      chosen += i;
+      makeChange(amount - (i * coin), coins, chosen);
+      chosen.remove(chosen.size() - 1);
+    }
+    coins.insert(0, coin);
+  }
+}
+
+
+/* Solution of the longestCommonSubsequence */
+string longestCommonSubsequence(string s1, string s2) {
+  if (s1.length() == 0 || s2.length() == 0) {
+    return "";
+  } else if (s1[0] == s2[0]) {
+    return s1[0] + longestCommonSubsequence(s1.substr(1), s2.substr(1));
+  } else {
+    string choice1 = longestCommonSubsequence(s1, s2.substr(1));
+    string choice2 = longestCommonSubsequence(s1.substr(1), s2);
+    if (choice1.length() >= choice2.length()) {
+      return choice1;
+    } else {
+      return choice2;
+    }
+  }
+}
+
+
+/* something to learn:
+   for (int i = 1; i <= text.length() && i <= 3; i++) {
+      if (symbols.contains(text.substr(0, i)) &&
+         isElementSpellable(text.substr(i), symbols)) {
+	    return true;
+	 }
+   }
+
+   return false;
+
+ */
+
+
+/* The below is very involved */
+
+static bool findAnagram(const string& prefix, const string& rest,
+			const Lexicon& english, Vector<string>& words) {
+  if (!english.containsPrefix(prefix)) return false; // up-communicate failure
+  if (english.contains(prefix) &&
+      prefix.length() >= kThresholdLength &&
+      (rest.empty() || findAnagram(rest, english, words))) {
+    words.add(prefix); // add word to the accumulation of other words
+    return true; // up-communicate success!
+  }
+
+  for (int i = 0; i < rest.length(); i++) {
+    string extended = prefix + rest[i];
+    string restofrest = rest.substr(0, i) + rest.substr(i + 1);
+    if (findAnagram(extended, restofrest, english, words))
+      return true;
+  }
+  return false;
+}
+
+
+/* Solution of print square from section */
+void printSquaresHelper(int n, int min, Set<int> &chosen) {
+  if (n < 0) {
+    return;
+  } else if (n == 0) {
+    cout << chosen << endl;
+  } else {
+    int max = (int) sqrt(n); // valid choices go up to sqrt(n)
+    for (int i = min; i <= max; i++) {
+      chosen.add(i); // choose
+      printSquaresHelper(n ­ (i * i), i + 1, chosen); // explore
+      chosen.remove(i); // un­choose
+    }
+  }
+}
+
+
+/* The rect tile problem from section */
+void gatherWordsHelper(string &prefix, Vector<string> &rects,
+		       Lexicon &english, Set<string> &words) {
+  if (!english.containsPrefix(prefix)) {
+    return;
+  } else if (english.contains(prefix)) {
+    words.add(prefix);
+  } else {
+    for (int i = 0; i < rects.size(); i++) {
+      string rect = rects[i];
+      rects.remove(i); // choose
+      // explore both orientations of the tile
+      gatherWordsHelper(prefix + rect[0] + rect[1], rects, english, words);
+      gatherWordsHelper(prefix + rect[1] + rect[0], rects, english, words);
+      rects.insert(i, rect); // un­choose
+    }
   }
 }
