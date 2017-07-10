@@ -88,148 +88,148 @@ void myMakeChange(int target, Vector<int> &coins, Vector<int> &count);
 int sumVectors(Vector<int> a, Vector<int> b);
 string longestCommonSubsequence(string s1, string s2);
 
-int main() {
+// int main() {
 
-  //cout << countHanoiMoves(3) << endl;
+//   //cout << countHanoiMoves(3) << endl;
 
-  //MoveTower(3, 'A', 'B', 'C');
+//   //MoveTower(3, 'A', 'B', 'C');
 
-  //moveTowerWithStack();
+//   //moveTowerWithStack();
 
-  // Set<int> test;
-  // test.add(1);
-  // test.add(3);
-  // test.add(4);
-  // test.add(5);  
-  // cout << countSubsetSumWays(test, 11) << endl;
-
-
-  // addEmbeddedWords(set, "happy");  
-
-  // Set<string> set;
-  // Vector<Set<string> > vec;
-  //insertToAllPositions(vec, "ABC", 'D');
-  // differentPermutation(set, "ABCD") ;
-  // string result = set.toString();
-  // cout << result << endl;
-
-  // for (string word : set) {
-  //   if (english.contains(word)) {
-  //     cout << word << endl;
-  //   }
-  // }
-
-  // Vector<int> sampleWeights;
-  // sampleWeights += 1, 3;
-  // cout << isMeasurable(5, sampleWeights) << endl;
-
-  //listMnemonics("72547");
-
-  Lexicon lex("EnglishWords.dat");
-  // listCompletions("72547", english);
-  //expandWords("rakis", english);
-
-  //GWindow gw;
-  //drawRuler(gw.getWidth() - 5, gw.getHeight() / 2,
-  //	    10, HALF_INCH_TICK, gw);
-  //drawRuler(0, 100, 100, HALF_INCH_TICK, gw);
-  //gw.add(new GLine(0, 0, gw.getWidth(), gw.getHeight()));
-  //gw.add(new GLine(0, gw.getHeight(), gw.getWidth(), 0));
-
-  //subdivideCanvas(gw, 0, 0, gw.getWidth(), gw.getHeight());
-
-  // Vector<int> test;
-  // test.add(3);
-  // test.add(6);
-  // test.add(4);
-  // test.add(1);
-  // test.add(3);
-  // test.add(4);
-  // test.add(2);
-  // test.add(5);
-  // test.add(3);
-  // test.add(0);  
-  // cout << solvable(1, test) << endl;
-
-  //writeChar(9);
-
-  //cout << isSubsequence("ccmputer", "ccpe") << endl;
+//   // Set<int> test;
+//   // test.add(1);
+//   // test.add(3);
+//   // test.add(4);
+//   // test.add(5);  
+//   // cout << countSubsetSumWays(test, 11) << endl;
 
 
-  // Set<string> cities;
-  // cities += "A";
-  // cities += "B";
-  // cities += "C";
-  // cities += "D";
-  // cities += "E";
-  // cities += "F";  
+//   // addEmbeddedWords(set, "happy");  
 
-  // Vector<Set<string> > locations;
-  // Set<string> temp;
-  // temp += "A";
-  // temp += "B";
-  // temp += "C";
-  // locations.add(temp);
+//   // Set<string> set;
+//   // Vector<Set<string> > vec;
+//   //insertToAllPositions(vec, "ABC", 'D');
+//   // differentPermutation(set, "ABCD") ;
+//   // string result = set.toString();
+//   // cout << result << endl;
 
-  // temp.clear();
-  // temp += "A";
-  // temp += "C";
-  // temp += "D";
-  // locations.add(temp);
+//   // for (string word : set) {
+//   //   if (english.contains(word)) {
+//   //     cout << word << endl;
+//   //   }
+//   // }
 
-  // temp.clear();
-  // temp += "B";
-  // temp += "F";
-  // locations.add(temp);
+//   // Vector<int> sampleWeights;
+//   // sampleWeights += 1, 3;
+//   // cout << isMeasurable(5, sampleWeights) << endl;
 
-  // temp.clear();
-  // temp += "C";
-  // temp += "E";
-  // temp += "F";
-  // locations.add(temp);
+//   //listMnemonics("72547");
 
-  //cout << cities.toString() << endl;
-  //cout << locations.toString() << endl;
-  // Vector<Set<string> > result;
+//   Lexicon lex("EnglishWords.dat");
+//   // listCompletions("72547", english);
+//   //expandWords("rakis", english);
+
+//   //GWindow gw;
+//   //drawRuler(gw.getWidth() - 5, gw.getHeight() / 2,
+//   //	    10, HALF_INCH_TICK, gw);
+//   //drawRuler(0, 100, 100, HALF_INCH_TICK, gw);
+//   //gw.add(new GLine(0, 0, gw.getWidth(), gw.getHeight()));
+//   //gw.add(new GLine(0, gw.getHeight(), gw.getWidth(), 0));
+
+//   //subdivideCanvas(gw, 0, 0, gw.getWidth(), gw.getHeight());
+
+//   // Vector<int> test;
+//   // test.add(3);
+//   // test.add(6);
+//   // test.add(4);
+//   // test.add(1);
+//   // test.add(3);
+//   // test.add(4);
+//   // test.add(2);
+//   // test.add(5);
+//   // test.add(3);
+//   // test.add(0);  
+//   // cout << solvable(1, test) << endl;
+
+//   //writeChar(9);
+
+//   //cout << isSubsequence("ccmputer", "ccpe") << endl;
+
+
+//   // Set<string> cities;
+//   // cities += "A";
+//   // cities += "B";
+//   // cities += "C";
+//   // cities += "D";
+//   // cities += "E";
+//   // cities += "F";  
+
+//   // Vector<Set<string> > locations;
+//   // Set<string> temp;
+//   // temp += "A";
+//   // temp += "B";
+//   // temp += "C";
+//   // locations.add(temp);
+
+//   // temp.clear();
+//   // temp += "A";
+//   // temp += "C";
+//   // temp += "D";
+//   // locations.add(temp);
+
+//   // temp.clear();
+//   // temp += "B";
+//   // temp += "F";
+//   // locations.add(temp);
+
+//   // temp.clear();
+//   // temp += "C";
+//   // temp += "E";
+//   // temp += "F";
+//   // locations.add(temp);
+
+//   //cout << cities.toString() << endl;
+//   //cout << locations.toString() << endl;
+//   // Vector<Set<string> > result;
   
-  // cout << canOfferUniversalCoverage(cities, locations, 3, result) << endl;
-  // cout << result.toString() << endl;
+//   // cout << canOfferUniversalCoverage(cities, locations, 3, result) << endl;
+//   // cout << result.toString() << endl;
 
 
-  // Set<string> test;
-  // test += "hello";
-  //generateNewSet(test);
-  //cout << test.toString() << endl;
-  //cout << test.contains("hello") << endl;
-  // int n = 0;
-  // myEditDistance(n, "bhllo", test);
-  // cout << n << endl;
+//   // Set<string> test;
+//   // test += "hello";
+//   //generateNewSet(test);
+//   //cout << test.toString() << endl;
+//   //cout << test.contains("hello") << endl;
+//   // int n = 0;
+//   // myEditDistance(n, "bhllo", test);
+//   // cout << n << endl;
 
-  // string s1 = "football";
-  // string s2 = "cookies";
-  // cout << editDistance(s1, s2) << endl;
+//   // string s1 = "football";
+//   // string s2 = "cookies";
+//   // cout << editDistance(s1, s2) << endl;
 
-  //cout << isBalanced("()[]{}{[()]}") << endl;
+//   //cout << isBalanced("()[]{}{[()]}") << endl;
 
-  //cout << morph("university", "school", lex) << endl;
+//   //cout << morph("university", "school", lex) << endl;
 
-  // Vector<int> test;
+//   // Vector<int> test;
 
-  // test.add(1);
-  // test.add(10);
-  // test.add(5);
+//   // test.add(1);
+//   // test.add(10);
+//   // test.add(5);
 
-  // Vector<int> temp;
-  // temp.add(0);
-  // temp.add(0);
-  // temp.add(0);  
+//   // Vector<int> temp;
+//   // temp.add(0);
+//   // temp.add(0);
+//   // temp.add(0);  
 
-  // makeChange(15, test);
+//   // makeChange(15, test);
 
-  cout << longestCommonSubsequence("mars", "megan") << endl;
+//   cout << longestCommonSubsequence("mars", "megan") << endl;
   
-  return 0;
-}
+//   return 0;
+// }
 
 
 /* Function: countHanoiMoves(int n)
@@ -1104,58 +1104,58 @@ string longestCommonSubsequence(string s1, string s2) {
 
 /* The below is very involved */
 
-static bool findAnagram(const string& prefix, const string& rest,
-			const Lexicon& english, Vector<string>& words) {
-  if (!english.containsPrefix(prefix)) return false; // up-communicate failure
-  if (english.contains(prefix) &&
-      prefix.length() >= kThresholdLength &&
-      (rest.empty() || findAnagram(rest, english, words))) {
-    words.add(prefix); // add word to the accumulation of other words
-    return true; // up-communicate success!
-  }
+// static bool findAnagram(const string& prefix, const string& rest,
+// 			const Lexicon& english, Vector<string>& words) {
+//   if (!english.containsPrefix(prefix)) return false; // up-communicate failure
+//   if (english.contains(prefix) &&
+//       prefix.length() >= kThresholdLength &&
+//       (rest.empty() || findAnagram(rest, english, words))) {
+//     words.add(prefix); // add word to the accumulation of other words
+//     return true; // up-communicate success!
+//   }
 
-  for (int i = 0; i < rest.length(); i++) {
-    string extended = prefix + rest[i];
-    string restofrest = rest.substr(0, i) + rest.substr(i + 1);
-    if (findAnagram(extended, restofrest, english, words))
-      return true;
-  }
-  return false;
-}
-
-
-/* Solution of print square from section */
-void printSquaresHelper(int n, int min, Set<int> &chosen) {
-  if (n < 0) {
-    return;
-  } else if (n == 0) {
-    cout << chosen << endl;
-  } else {
-    int max = (int) sqrt(n); // valid choices go up to sqrt(n)
-    for (int i = min; i <= max; i++) {
-      chosen.add(i); // choose
-      printSquaresHelper(n ­ (i * i), i + 1, chosen); // explore
-      chosen.remove(i); // un­choose
-    }
-  }
-}
+//   for (int i = 0; i < rest.length(); i++) {
+//     string extended = prefix + rest[i];
+//     string restofrest = rest.substr(0, i) + rest.substr(i + 1);
+//     if (findAnagram(extended, restofrest, english, words))
+//       return true;
+//   }
+//   return false;
+// }
 
 
-/* The rect tile problem from section */
-void gatherWordsHelper(string &prefix, Vector<string> &rects,
-		       Lexicon &english, Set<string> &words) {
-  if (!english.containsPrefix(prefix)) {
-    return;
-  } else if (english.contains(prefix)) {
-    words.add(prefix);
-  } else {
-    for (int i = 0; i < rects.size(); i++) {
-      string rect = rects[i];
-      rects.remove(i); // choose
-      // explore both orientations of the tile
-      gatherWordsHelper(prefix + rect[0] + rect[1], rects, english, words);
-      gatherWordsHelper(prefix + rect[1] + rect[0], rects, english, words);
-      rects.insert(i, rect); // un­choose
-    }
-  }
-}
+// /* Solution of print square from section */
+// void printSquaresHelper(int n, int min, Set<int> &chosen) {
+//   if (n < 0) {
+//     return;
+//   } else if (n == 0) {
+//     cout << chosen << endl;
+//   } else {
+//     int max = (int) sqrt(n); // valid choices go up to sqrt(n)
+//     for (int i = min; i <= max; i++) {
+//       chosen.add(i); // choose
+//       printSquaresHelper(n ­ (i * i), i + 1, chosen); // explore
+//       chosen.remove(i); // un­choose
+//     }
+//   }
+// }
+
+
+// /* The rect tile problem from section */
+// void gatherWordsHelper(string &prefix, Vector<string> &rects,
+// 		       Lexicon &english, Set<string> &words) {
+//   if (!english.containsPrefix(prefix)) {
+//     return;
+//   } else if (english.contains(prefix)) {
+//     words.add(prefix);
+//   } else {
+//     for (int i = 0; i < rects.size(); i++) {
+//       string rect = rects[i];
+//       rects.remove(i); // choose
+//       // explore both orientations of the tile
+//       gatherWordsHelper(prefix + rect[0] + rect[1], rects, english, words);
+//       gatherWordsHelper(prefix + rect[1] + rect[0], rects, english, words);
+//       rects.insert(i, rect); // un­choose
+//     }
+//   }
+// }
