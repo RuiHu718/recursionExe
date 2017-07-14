@@ -64,26 +64,23 @@ void insertSort(node* & head);
 void append(node* & a, node* & b);
 void frontBackSplit(node *source, node* & front, node* & back);
 void removeDuplicates(node *head);
+void myTest(node *head);
 
+// int main()
+// {
 
-int main()
-{
-
-  node *testList = NULL;
-  //node *testList2 = NULL;
+//   node *testList = NULL;
+//   //node *testList2 = NULL;
   
-  testList = buildOneTwoThree();
-  //testList2 = buildOneTwoThree();
+//   testList = buildOneTwoThree();
+//   //testList2 = buildOneTwoThree();
   
-  push(testList, 0);
-  push(testList, 0);
-  removeDuplicates(testList);
-  printList(testList);
+//   myTest(testList);
 
 
 
-  return 0;
-}
+//   return 0;
+// }
 
 
 node *buildOneTwoThree()
@@ -411,4 +408,12 @@ void removeDuplicates(node *head)
 
 
   
+}  
+
+
+void myTest(node *head)
+{
+  for (node *cur = head; cur -> next != NULL; cur = cur -> next) {
+    cout << cur -> data << endl;
+  }
 }  
